@@ -8,16 +8,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-/* You must implement these functions according to the specification
- * given in heaplib.h. You can define any types you like to this file.
- *
- * Student 1 Name: Shefali Agarwal
- * Student 1 NetID: sa652
- * Student 2 Name: Nehal Rawat
- * Student 2 NetID: nr338
- *
- * Include a description of your approach here.
- * For out structs, we have a header for free block headers, a footer for all block, a heap_header for the heap meta data and an allocheader for allocated block headers.
+/* For out structs, we have a header for free block headers, a footer for all block, a heap_header for the heap meta data and an allocheader for allocated block headers.
  * For hl_init, after the our heap meta data, we 8-byte aligned the pointer at the end of the heap meta data and set the rest of the space as a free block.
  * For hl_alloc, we first find a free block that can fit the data in the new allocated block. Then, if there is enough free space, then we create a new smaller free block
  * otherwise, we allocate the entire free block to the new allocated block.
@@ -59,9 +50,6 @@ typedef struct allocheader{
   bool padding2;
 } allocheader;
 
-//fix bool as bool = 1 byte.
-
-
 /* Useful shorthand: casts a pointer to a (char *) before adding */
 #define ADD_BYTES(base_addr, num_bytes) (((char *)(base_addr)) + (num_bytes))
 
@@ -90,8 +78,7 @@ int hl_init(void *heap_ptr, unsigned int heap_size) {
 		return 0;
 	}
 
-	heapmeta->firstfree = starting; 
-	// heapmeta->last = (footer *) ADD_BYTES(heap_ptr, (heap_size - sizeof(footer)));
+	heapmeta->firstfree = starting;
 	heapmeta->heapsize = heap_size - before_firstfreehead;
 	heapmeta->beforefirstfreehead = before_firstfreehead;
 	footer *firstfreefoot = (footer *) ADD_BYTES(starting, (sizeof(header) + true_heap_size));
@@ -114,20 +101,12 @@ int hl_init(void *heap_ptr, unsigned int heap_size) {
 void *hl_alloc(void *heap_ptr, unsigned int payload_size) {
 
 	heap_header *heapmeta = (heap_header *)heap_ptr;
-
-	// printf("%s", "firstfree: ");
-	// fflush(stdout);
-	// printf("%p", heapmeta->firstfree);
-	// fflush(stdout);
 	
 	if (payload_size == 0) {
 		return NULL;
 	}
 
-	header *current = heapmeta->firstfree;
-
-	// printf("%p", current);
-	// fflush(stdout);
+	header *current = heapmeta->firstfree;\
 
 	if(current == NULL) {
 		return 0;
@@ -212,22 +191,13 @@ void *hl_alloc(void *heap_ptr, unsigned int payload_size) {
 
 	void *return_pointer = (void *) ADD_BYTES(newhead, sizeof(allocheader));
 
-	//HOW TO MODIFY THE LAST BLOCK AND ADD 2???
-
     return return_pointer;
 
 }
 
 void hl_release(void *heap_ptr, void *payload_ptr) {
 
-	heap_header *heapmeta = (heap_header *)heap_ptr;
-
-	// void *end_heapmeta = (void *) ADD_BYTES(heapmeta, sizeof(heapmeta));
-	// header *starting = (header *)end_heapmeta;
-	// if ((uintptr_t)end_heapmeta%8 != 0) {
-	// 	starting = (header *) ADD_BYTES(starting, (8 - (uintptr_t)end_heapmeta%8));
-	// }
-	// uintptr_t before_firstfreehead = (uintptr_t)starting - (uintptr_t)heap_ptr;
+	heap_header *heapmeta = (heap_header *)heap_ptr;]
 
 	if (payload_ptr == 0) {
 		return;
@@ -282,8 +252,6 @@ void hl_release(void *heap_ptr, void *payload_ptr) {
 	new_release_header->next = heapmeta->firstfree;
 	new_release_header->prev = NULL;
 	heapmeta->firstfree = new_release_header;
-
-	//We have never first told what next and prev are!
 
 }
 
